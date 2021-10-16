@@ -6,19 +6,6 @@
 
 #include <stdio.h>
 
-int i2c_dev_init(struct i2c_dev *dev)
-{
-	if (!dev->bus || !dev->addr)
-		return -EINVAL;
-
-	gpio_set_function(dev->sda_gpio, GPIO_FUNC_I2C);
-	gpio_set_function(dev->scl_gpio, GPIO_FUNC_I2C);
-
-	i2c_init(dev->bus, dev->baudrate);
-
-	return 0;
-}
-
 int i2c_dev_read(struct i2c_dev *dev, uint8_t reg, uint8_t *value)
 {
 	int err = 0;
