@@ -20,6 +20,6 @@ inline bool is_reserved_addr(uint8_t addr)
 
 void i2c_framework_init();
 void i2c_device_register(struct i2c_dev *dev);
-void i2c_device_try_probe(struct i2c_bus *bus, uint8_t device_addr);
+int i2c_device_try_probe(struct i2c_bus *bus, uint8_t device_addr);
 
 #endif

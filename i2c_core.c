@@ -1,6 +1,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 
+#include "error.h"
 #include "i2c_core.h"
 #include "i2c_bus.h"
 
@@ -44,7 +45,15 @@ void i2c_device_register(struct i2c_dev *dev)
 	}	
 }
 
-void i2c_device_try_probe(struct i2c_bus *bus, uint8_t device_addr)
+int i2c_device_try_probe(struct i2c_bus *bus, uint8_t device_addr)
 {
+	struct i2c_device_list *device;
 
+	for (device = i2c_devices; device != NULL; device = device->next) {
+		struct i2c_dev *i2c_dev = device->dev;
+		if (i2c_dev->addr == device_addr)
+			return device->dev->ops->init(i2c_dev);
+	}
+
+	return -ENODEV;
 }
