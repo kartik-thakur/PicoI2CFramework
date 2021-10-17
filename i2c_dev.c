@@ -21,6 +21,25 @@ int i2c_dev_read(struct i2c_dev *dev, uint8_t reg, uint8_t *value)
 	return 0;
 }
 
+int i2c_dev_burst_read(struct i2c_dev *dev, uint8_t reg, uint8_t *buffer,
+		       uint8_t nbytes)
+{
+	int err = 0;
+
+	if (!nbytes)
+		return -EINVAL;
+
+	err = i2c_write_blocking(dev->bus, dev->addr, &reg, 1, true);
+	if (err == PICO_ERROR_GENERIC)
+		return -EINVAL;
+
+	err = i2c_read_blocking(dev->bus, dev->addr, buffer, nbytes, false);
+	if (err == PICO_ERROR_GENERIC)
+		return -EINVAL;
+
+	return 0;
+}
+
 
 int i2c_dev_write(struct i2c_dev *dev, const uint8_t reg, uint8_t value)
 {
